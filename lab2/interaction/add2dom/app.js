@@ -15,12 +15,8 @@ var main = function () {
       newComment.textContent = document.querySelector(
         ".comment-input input"
       ).value;
-      // Initially hide the comment
-      newComment.style.display = "none";
       // Append the new comment to the comments section
       document.querySelector(".comments").appendChild(newComment);
-      // Show the comment
-      newComment.style.display = "";
       // Clear the input box
       document.querySelector(".comment-input input").value = "";
     }
