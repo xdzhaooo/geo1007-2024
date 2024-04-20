@@ -40,7 +40,7 @@ var allFunctions = function () {
     countryInput
   ) {
     var baseUrl =
-      "//api.geonames.org/postalCodeLookupJSON?username=bktudelft";
+      "http://api.geonames.org/postalCodeLookupJSON?username=bktudelft";
     var params = "&postalcode=" + postalcodeInput + "&country=" + countryInput;
     var requestUrl = baseUrl + params;
 

@@ -37,7 +37,7 @@ var allFunctions = function () {
     countryInput
   ) {
     var baseUrl =
-      "//api.geonames.org/postalCodeLookupJSON?username=bktudelft";
+      "http://api.geonames.org/postalCodeLookupJSON?username=bktudelft";
     var params = "&postalcode=" + postalcodeInput + "&country=" + countryInput;
     var requestUrl = baseUrl + params;
 
@@ -91,8 +91,12 @@ var allFunctions = function () {
         searchFromInput();
       }
     });
+  // };
 
-    var anotherGeonamesRequest = function (latitude, longitude) {
+  // document.addEventListener("DOMContentLoaded", allFunctions);
+
+  //   "use strict";
+  var anotherGeonamesRequest = function (latitude, longitude) {
     var baseUrl =
       "http://api.geonames.org/findNearestIntersectionOSM?username=bktudelft";
     var params = "&lat=" + latitude + "&lng=" + longitude;
