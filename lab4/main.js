@@ -47,9 +47,9 @@ var map = L.map("map-canvas", {
 
 // 2. aerial photo * not working at this moment (see Assignment)
 //    - can be switched on/off by toggle thru L.control.layers (see below in this script)
-var wms_aerial_url = "https://geodata1.nationaalgeoregister.nl/luchtfoto/wms?";
+var wms_aerial_url = "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0?";
 var basemap_aerial = new L.tileLayer.wms(wms_aerial_url, {
-  layers: ["luchtfoto_png"],
+  layers: ["Actueel_orthoHR"],
   styles: "",
   format: "image/png",
   transparent: true,
@@ -71,9 +71,63 @@ var sound = new L.tileLayer.wms(wms_sound_url, {
   pointerCursor: true,
 });
 
+
+//4 people
+// Base WMS service URL
+// var wms_geoserver_url = "http://localhost:8080/geoserver/xd/wms?";
+
+// // Create the map layer using Leaflet's tileLayer.wms method
+// var geoserverLayer = new L.tileLayer.wms(wms_geoserver_url, {
+//   layers: "parcels",  // Specify the layer to be displayed from the WMS service
+//   styles: "",  // Define any specific styles; here it's set to an empty string
+//   format: "image/png",  // Specify the format of the map image
+//   transparent: true,  // Set transparency of the layer
+//   attribution: '© <a href="http://geoserver.org">GeoServer</a>',  // Set attribution; update the URL as needed
+//   pointerCursor: true  // Enable pointer cursor on hover
+// });
+
+// add parcels layer
+var wms_parcels_url = "http://localhost:8080/geoserver/xd/wms?";
+var parcels = new L.tileLayer.wms(wms_parcels_url, {
+  layers: "parcels", 
+  styles: "", 
+  format: "image/png",
+  transparent: true,
+  attribution: '© <a href="https://www.tudelft.nl/">TUDelft</a>',
+  pointerCursor: true,
+});
+
+var wms_building_terrein_url = "http://localhost:8080/geoserver/xd/wms?";
+var wms_building_terrein = new L.tileLayer.wms(wms_building_terrein_url, {
+  layers: ["GEBOUW_VLAK", "TERREIN_VLAK"],
+  styles: ["gebouw_vlak", "terrein_vlak"], 
+  format: "image/png",
+  transparent: true,
+  attribution: '© <a href="https://www.tudelft.nl/">TUDelft</a>',
+  pointerCursor: true,
+});
+
+
+	//https://service.pdok.nl/lvnl/drone-no-flyzones/wms/v1_0?request=GetCapabilities&service=WMS
+
+var no_fly_url = 	"https://service.pdok.nl/lvnl/drone-no-flyzones/wms/v1_0?";
+var no_fly = new L.tileLayer.wms(no_fly_url, {
+  layers:["luchtvaartgebieden_zonder_natura2000","landingsite","luchtvaartgebieden"],
+  styles: "", 
+  format: "image/png",
+  transparent: true,
+  attribution: '© <a href="https://www.tudelft.nl/">TUDelft</a>',
+  pointerCursor: true,
+});
+
+
 var overlays = {
   "Road noise [WMS]": sound,
+  "Parcels [WMS]": parcels,
+  "No fly zone [WMS]": no_fly,
+  "Building & Terrein [WMS]": wms_building_terrein,
 };
+
 
 var baseLayers = {
   "BRT-Achtergrondkaart [WMTS]": brtRegular,
