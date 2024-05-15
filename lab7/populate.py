@@ -7,7 +7,6 @@ import urllib.error
 import urllib.request
 
 API_ROOT = "http://localhost:8080/FROST-Server.HTTP-2.3.1/v1.1"
-### STUDENTS FILL THIS OUT ####################################################
 API_END_POINTS = {
     "Datastreams": API_ROOT + "/Datastreams",
     "FeaturesOfInterest" : API_ROOT + "/FeaturesOfInterest",
@@ -29,6 +28,31 @@ LOCATION_TO_DATASTREAM_MAP = {
     }
 
 class SensorThingsCreator():
+    """
+    A class for creating entities in the SensorThings API.
+
+    Args:
+        - api_endpoint_urls (Dict[str, str]): A dictionary containing the API 
+        endpoint URLs.
+        - data_path (Path): The path to the data file.
+        - location_to_datastream_map (Dict[str, int]): A dictionary mapping 
+        location names to datastream IDs.
+
+    Attributes:
+        - api_endpoint_urls (Dict[str, str]): A dictionary containing the API 
+        endpoint URLs.
+        - data_path (Path): The path to the data file.
+        - location_to_datastream_map (Dict[str, int]): A dictionary mapping 
+        location names to datastream IDs.
+        - _thingDBpopulated (bool): Indicates whether the Thing database has been 
+        populated.
+        - _locationDBpopulated (bool): Indicates whether the Location database has 
+        been populated.
+        - _datastreamDBpopulated (bool): Indicates whether the Datastream database 
+        has been populated.
+        - _observationsDBpopulated (bool): Indicates whether the Observations 
+        database has been populated.
+    """
 
     def __init__(self,
                  api_endpoint_urls: Dict[str, str],
@@ -48,6 +72,23 @@ class SensorThingsCreator():
                      descriptions:List[str], 
                      properties:List[Dict[str, str]]
                      ) -> None:
+        """
+        Creates things with the given names, descriptions, and properties.
+
+        Args:
+            - names (List[str]): A list of names for the things.
+            - descriptions (List[str]): A list of descriptions for the things.
+            - properties (List[Dict[str, str]]): A list of dictionaries 
+            representing the properties of the things.
+
+        Raises:
+            - InterruptedError: If things have already been created.
+            - ValueError: If the lengths of `names`, `descriptions`, and 
+            `properties` are not equal.
+
+        Returns:
+            None
+        """
         if self._thingDBpopulated == True:
             raise InterruptedError("Things have already been created.")
         if not len(names) == len(descriptions) == len(properties):
@@ -58,13 +99,13 @@ class SensorThingsCreator():
                     "name": names[i],
                     "description": descriptions[i],
                     "properties": properties[i]
-                    }
-                ).encode("utf-8")
+                }
+            ).encode("utf-8")
             request = urllib.request.Request(
                 self.api_endpoint_urls["Things"], 
                 data=payload, 
                 method='POST'
-                )
+            )
             request.add_header('Content-Type','application/json')
             try:
                 with urllib.request.urlopen(request) as response:
@@ -72,7 +113,7 @@ class SensorThingsCreator():
             except urllib.error.HTTPError as e:
                 print(e.read())
                 break
-            self._thingDBpopulated = True
+        self._thingDBpopulated = True
 
     def create_Location(
             self,
@@ -80,6 +121,24 @@ class SensorThingsCreator():
             descriptions:List[str], 
             properties:List[Dict[str, str]],
             coordinates:List[Tuple[int, int]]) -> None:
+        """
+        Creates locations in the database.
+
+        Args:
+            - names (List[str]): A list of location names.
+            - descriptions (List[str]): A list of location descriptions.
+            - properties (List[Dict[str, str]]): A list of dictionaries 
+            representing location properties.
+            - coordinates (List[Tuple[int, int]]): A list of coordinate tuples 
+            representing the location coordinates.
+
+        Raises:
+            - InterruptedError: If locations have already been created.
+            - ValueError: If the lengths of the input lists are not the same.
+
+        Returns:
+            None
+        """
         if self._locationDBpopulated == True:
             raise InterruptedError("Location have already been created.")
         if not len(names) == len(descriptions) == len(properties):
@@ -111,10 +170,24 @@ class SensorThingsCreator():
         self._locationDBpopulated = True
 
     def create_Datastreams(
-            self,
-            names: List[str],
-            descriptions: List[str]
-            ) -> None:
+        self,
+        names: List[str],
+        descriptions: List[str]
+    ) -> None:
+        """
+        Creates datastreams in the database.
+
+        Args:
+            - names (List[str]): A list of names for the datastreams.
+            - descriptions (List[str]): A list of descriptions for the datastreams.
+
+        Raises:
+            - InterruptedError: If the database has already been created.
+            - ValueError: If the lengths of `names` and `descriptions` are not equal.
+
+        Returns:
+            None
+        """
         if self._datastreamDBpopulated == True:
             raise InterruptedError("Database have already been created.")
         if not len(names) == len(descriptions):
@@ -133,13 +206,13 @@ class SensorThingsCreator():
                     "Thing":{"@iot.id": i+1},
                     "Sensor":{"@iot.id": 1},
                     "ObservedProperty": {"@iot.id":1}
-                    }
-                ).encode("utf-8")
+                }
+            ).encode("utf-8")
             request = urllib.request.Request(
                 self.api_endpoint_urls["Datastreams"], 
                 data=payload, 
                 method='POST'
-                )
+            )
             request.add_header('Content-Type','application/json')
             try:
                 with urllib.request.urlopen(request) as response:
@@ -258,7 +331,7 @@ if __name__ == "__main__":
             "Cornelis Drebbelweg 1 Stream",
             "Zuidplantsoen Stream"]
     datastream_descriptions = ['null', 'null', 'null', 'null', 'null','null']
-
+    # create SensorThings
     sensor_things_creator = SensorThingsCreator(
         api_endpoint_urls=API_END_POINTS,
         data_path=DATA_PATH,
