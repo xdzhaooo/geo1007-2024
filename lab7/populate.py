@@ -91,7 +91,7 @@ class SensorThingsCreator():
                     "description": descriptions[i],
                     "properties": properties[i],
                     "encodingType": "application/geo+json",
-                    "location": {"type":"point",
+                    "location": {"type":"Point",
                                 "coordinates":coordinates[i]},
                     "Things": [{"@iot.id": i+1}]
                     }
@@ -203,7 +203,7 @@ class SensorThingsCreator():
                 payload = json.dumps({
                     "result" : reading, 
                     "Datastream": {"@iot.id": LOCATION_TO_DATASTREAM_MAP[loc]},
-                    "resultTime": date
+                    "phenomenonTime": date
                 }
             ).encode("utf-8")
                 request = urllib.request.Request(
@@ -234,12 +234,12 @@ if __name__ == "__main__":
     location_descriptions = ['null', 'null', 'null', 'null', 'null','null']
     location_properties = [{},{},{},{},{},{}]
     location_coords = [
-        (52.001401400000006, 4.3753217265647715),
-        (51.995834505946036, 4.378289595882866),
-        (51.98902558688054, 4.3796559934685835),
-        (51.99002160897592, 4.375407295459066),
-        (51.998395366361954, 4.369542097678816),
-        (52.00548141262594, 4.3715966517066756)
+        (4.3753217265647715, 52.001401400000006),
+        (4.378289595882866, 51.995834505946036,),
+        (4.3796559934685835, 51.98902558688054),
+        (4.375407295459066, 51.99002160897592),
+        (4.369542097678816, 51.998395366361954),
+        (4.3715966517066756, 52.00548141262594)
                 ]
     ## Thing data:
     thing_names = ["Van der Waalsweg Carpark",
